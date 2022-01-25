@@ -7,19 +7,19 @@ import java.util.Scanner;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 
-public class ProductWriter {
+public class ProductGenerator {
 
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
         String fileName = "";
         boolean another = false;
-        ArrayList<String> productRecord = new ArrayList<>();
+        ArrayList<Product> productRecord = new ArrayList<>();
         do {
             String ID = SafeInput.getRegExString(in, "Enter Product ID #", "\\d{6}");
             String name = SafeInput.getNonZeroLenString(in, "Enter Product Name");
             String desc = SafeInput.getNonZeroLenString(in, "Enter Product Description");
             double cost = SafeInput.getDouble(in, "Enter price of product");
-            productRecord.add(ID + ", " + name + ", " + desc + ", " + cost);
+            productRecord.add(new Product(ID, name, desc, cost));
             System.out.println();
             another = SafeInput.getYNConfirm(in, "Submit another product?");
             System.out.println();
@@ -32,8 +32,8 @@ public class ProductWriter {
                     new BufferedOutputStream(Files.newOutputStream(file, CREATE));
             BufferedWriter writer =
                     new BufferedWriter(new OutputStreamWriter(out));
-            for(String rec : productRecord){
-                writer.write(rec, 0, rec.length());
+            for(Product product : productRecord){
+                writer.write(product.toCSV());
                 writer.newLine();
             }
             writer.close();

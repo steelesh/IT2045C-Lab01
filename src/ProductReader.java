@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 
@@ -25,23 +26,23 @@ public class ProductReader {
                         new BufferedInputStream(Files.newInputStream(file, CREATE));
                 BufferedReader reader =
                         new BufferedReader(new InputStreamReader(in));
-                String str = String.format("%-1sID#", ID);
-                String str1 = String.format("%-7sName",name);
-                String str2 = String.format("%-13sDesc.", desc);
-                String str3 = String.format("%-23sCost", cost);
-                System.out.println(str + str1 + str2 + str3);
-                System.out.println("===============================================================");
+                System.out.printf("%-11s", " ID#");
+                System.out.printf("%-22s", "Name");
+                System.out.printf("%-25s", "Desc.");
+                System.out.printf("%-12s\n", "Cost");
+                System.out.println("================================================================");
+                ArrayList<Product> productsRecord = new ArrayList<>();
                 while(reader.ready()){
                     rec = reader.readLine();
                     String[] data = rec.split(",");
-                    String IDnum = String.format("%-9s", data[0]);
-                    String nameData = String.format("%-16s", data[1]);
-                    String descData = String.format("%-29s", data[2]);
-                    String costData = String.format("%s", data[3]);
-                    System.out.printf(IDnum + nameData + descData + "$" + costData + "\n");
+                    productsRecord.add(new Product(data[0], data[1], data[2], Double.parseDouble(data[3])));
+                    System.out.printf("%-9s", data[0]);
+                    System.out.printf("%-20s", data[1]);
+                    System.out.printf("%-27s", data[2]);
+                    System.out.printf("%s\n", data[3]);
                 }
                 reader.close();
-                System.out.println("\n\nData File read!");
+                System.out.println("\nData File read!");
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
